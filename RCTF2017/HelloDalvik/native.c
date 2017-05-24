@@ -124,7 +124,7 @@ signed int __cdecl Java_com_rctf_hellodalvik_MainActivity_stringFromJNI(JNIEnv *
   return result;
 }
 
-int __cdecl sub_5734(size_t page_size, int dexFileInMemory, char *method_name, char *method_class_path, int flag)
+int __cdecl patch(size_t page_size, int dexFileInMemory, char *method_name, char *method_class_path, int flag)
 {
   int v5; // edi@1
   size_t v6; // eax@1
@@ -229,7 +229,7 @@ LABEL_23:
   {
     if ( flag == 1 )
     {
-      v26 = &add_opcodes;
+      v26 = &add_opcodes;			// opcode patching
       goto LABEL_28;
     }
     if ( flag )
