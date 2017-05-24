@@ -18,13 +18,13 @@ public class BruteForcer {
         }
         int a,b,c,d,e,f,h;
         for(int i = 0; i < 32; ++i) {
-            h = i % tripArr.length;
-            b = i % codeCharArr.length;
-            c = b + tripArr[h];
-            d = c % codeCharArr[b];
-            f = c * d;
-            e = d ^ codeCharArr[h];
-            a = f + e;
+            h = i % tripArr.length;				//MathMethod_3
+            b = i % codeCharArr.length;			//MathMethod_3
+            c = b + tripArr[h];					//MathMethod_4 ('/' changed to '+')
+            d = c % codeCharArr[b];				//MathMethod_1 ('+' changed to '%')
+            f = c * d;							//MathMethod_2
+            e = d ^ codeCharArr[h];				//MathMethod_5
+            a = f + e;							//MathMethod_4 ('/' changed to '+')
             resultHash[i] = (char)(a & 0xFF);
         }
         return resultHash;

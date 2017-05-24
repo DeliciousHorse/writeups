@@ -80,13 +80,13 @@ public class MainActivity extends AppCompatActivity {
       }
 
       for(var2 = 0; var2 < 32; ++var2) {
-         this.int_8 = (new MathMethod()).rem(var2, var4.length);				//0
-         this.int_2 = (new MathMethod()).rem(var2, this.codeCharArr.length);	//0
-         this.int_3 = (new MathMethod()).div(this.int_2, var4[this.int_8]);		//0
-         this.int_4 = (new MathMethod()).plus(this.int_3, this.codeCharArr[this.int_2]);	//c[0]
-         this.int_6 = (new MathMethod()).mul(this.int_3, this.int_4);			//0
-         this.int_5 = (new MathMethod()).xor(this.int_4, this.codeCharArr[this.int_8]); //0
-         this.int_1 = (new MathMethod()).div(this.int_6, this.int_5);	// 0 /0
+         this.int_8 = (new MathMethod()).rem(var2, var4.length);	//MathMethod_3
+         this.int_2 = (new MathMethod()).rem(var2, this.codeCharArr.length);	//MathMethod_3
+         this.int_3 = (new MathMethod()).div(this.int_2, var4[this.int_8]);		//MathMethod_4
+         this.int_4 = (new MathMethod()).plus(this.int_3, this.codeCharArr[this.int_2]);	//MathMethod_1
+         this.int_6 = (new MathMethod()).mul(this.int_3, this.int_4);	//MathMethod_2
+         this.int_5 = (new MathMethod()).xor(this.int_4, this.codeCharArr[this.int_8]);	//MathMethod_5
+         this.int_1 = (new MathMethod()).div(this.int_6, this.int_5);	//MathMethod_4
          var3[var2] = (char)(this.int_1 & this.int_7);
       }
 
