@@ -6,7 +6,7 @@ Overview
 --------------------------------
 
 As one may guess from the task title, this is a binary written in Go. Furthermore it implements custom virtual machine. To make finding the actual main function easier I used [IDAGolangHelper](https://github.com/sibears/IDAGolangHelper), an awesome IDA script that renames function based on metadata found in the binary. After running this script, main function can be found under **main_main** name.
-![Overview](img/overview.png)
+![Overview](img/overview.PNG)
 Looking at the function graph and decompiled snipped it seems that indeed this is a vm.
 
 vm analysis
@@ -92,24 +92,24 @@ shuffle	(0x0)
 
 Having this dump I tried to duplicate my original idea. But this time not in a debugger but in python emulated environment. I wrote a script that parses whole trace dump and replays it. It also feeds different four chararacter sequences and checks the resulting hash. Here is a snippet of that script:
 
-```
-	elif line.startswith('shuffle'):
-		pass
-	elif line.startswith('read_input'):
-		top += 1
-		stack[top] = ord(flag[flag_ctr])
-		flag_ctr += 1
-	elif line.startswith('save at'):
-		val = int(line[line.index('(')+1: line.index(')')], 16) 
-		mem[val] = stack[top]
-	elif line.startswith('load at'):
-		val = int(line[line.index('(')+1: line.index(')')], 16) 
-		stack[top] = mem[val]
-	
-	# calculated hash is written at this offset to be compared later
-	# no need to replay further
-	if line.startswith('save at (0x51)'):
-		return stack[top] == expected_hash
+```python
+elif line.startswith('shuffle'):
+	pass
+elif line.startswith('read_input'):
+	top += 1
+	stack[top] = ord(flag[flag_ctr])
+	flag_ctr += 1
+elif line.startswith('save at'):
+	val = int(line[line.index('(')+1: line.index(')')], 16) 
+	mem[val] = stack[top]
+elif line.startswith('load at'):
+	val = int(line[line.index('(')+1: line.index(')')], 16) 
+	stack[top] = mem[val]
+
+# calculated hash is written at this offset to be compared later
+# no need to replay further
+if line.startswith('save at (0x51)'):
+	return stack[top] == expected_hash
 ```  
 
 Huge advantage over full blown vm interpreter is that I didn't need to parse raw bytecode and handle shuffle operations, that as already explained is a bit tricky.  
@@ -119,14 +119,14 @@ Unfortunately this solution proved to be too slow to check every combination, ev
 Funny thing is that despite tring so hard not to analyze the bytecode I already analyzed it quite a bit by reading vm trace and finding for example location where calculated hash is stored.  
 Having failed with my previous _clever_ attempts I decided to dump traces for two simillar user inputs and compare them in order to understand what is this vm actually doing. And this turned out not to be as hard as I expected at first.
 Here is a trace comparison for inputs `abcd` and `dcba`
-![Diff1](img/trace_diff1.png)
+![Diff1](img/trace_diff1.PNG)
 I noticed that a lot of values are the same, so it was easy to scroll through the trace and identify important places. First input is multiplied by itself, as shown on above picture. Then `mod 0x8405b751` of that multiplication is calculated
-![Diff2](img/trace_diff2.png)
+![Diff2](img/trace_diff2.PNG)
 The result is again multipied by itself and modulo is calculated.
 This process repeats 8 times, and at the end it is multipied by unmodified input and `mod 0x8405b751` of that is the final hash. 
-![Diff3](img/trace_diff3.png)
+![Diff3](img/trace_diff3.PNG)
 Calculated hash is stored in memory, starting at `0x50`
-![Diff4](img/trace_diff4.png)
+![Diff4](img/trace_diff4.PNG)
 
 So the algorithm turns out to be really simple:
 ```python
@@ -137,11 +137,11 @@ def calc_hash(input, mod):
     return val*input % mod
 ``` 
 Let's test it:
-![Hashing function](img/calc_hash.png)
+![Hashing function](img/calc_hash.PNG)
 We get the same results.  
 Checking out next parts of the flag, their hashes are calculated the same, just modulo is different.  
 Only thing left to do is to collect expected hashes, and write a script that will brute force correct inputs. Hashes can be extracted from trace, just remember that program will crash when the first mismatch occurs. Se either re-run the trace after each four characters input is found, or patch the comparison.
-![Hashing comparison](img/hash_comparison.png)
+![Hashing comparison](img/hash_comparison.PNG)
 
 Here is the final script:
 ```python
@@ -171,7 +171,7 @@ for i in range(len(mod)):
 The flag
 ------ 
 
-![Flag](img/flag.png)
+![Flag](img/flag.PNG)
 
 ### Final thought
 ![Meme](img/meme.jpg)
