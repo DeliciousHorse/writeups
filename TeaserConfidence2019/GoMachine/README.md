@@ -137,7 +137,9 @@ def calc_hash(input, mod):
     return val*input % mod
 ``` 
 Let's test it:
+
 ![Hashing function](img/calc_hash.PNG)
+
 We get the same results.  
 Checking out next parts of the flag, their hashes are calculated the same, just modulo is different.  
 Only thing left to do is to collect expected hashes, and write a script that will brute force correct inputs. Hashes can be extracted from trace, just remember that program will crash when the first mismatch occurs. Se either re-run the trace after each four characters input is found, or patch the comparison.
